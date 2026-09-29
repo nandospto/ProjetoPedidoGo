@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Pedidos de Balcão</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input,
+        button {
+            padding: 8px;
+            margin-right: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Pedidos de Balcão</h1>
+
+    <!-- Formulário para Criar Pedido -->
+    <h2>Novo Pedido</h2>
+    <form action="/create" method="POST">
+        <input type="text" name="descricao" placeholder="Descrição do pedido (ex: 2x x-burguer)" required>
+        <button type="submit">Criar Pedido</button>
+    </form>
+
+    <!-- Tabela para Listar Pedidos -->
+    <h2>Lista de Pedidos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descrição</th>
+                <th>Status</th>
+                <th>Data</th>
+                <th>Ações</th>
+                <th>Remover</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .}}
+            <tr>
+                <td>{{.Id}}</td>
+                <td>{{.Description}}</td>
+                <td>{{.Status}}</td>
+                <td>{{.Created_at.Format "02/01/2006 15:04"}}</td>
+                <td>
+                    {{if ne .Status "finalizado"}}
+                    <a href="/update?id={{.Id}}">Atualizar</a>
+                    {{else}}
+                    Finalizado
+                    {{end}}
+                </td>
+                <td>
+                    {{if ne .Status "Remover"}}
+                    <a href="/delete?id={{.Id}}">X</a>
+                    {{end}}
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="5">Nenhum pedido encontrado.</td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+</body>
+
+</html>
