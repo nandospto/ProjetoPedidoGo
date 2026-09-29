@@ -19,11 +19,12 @@ func main() {
 	// Inicializa o Handler
 	pedidoHandler := &handlers.PedidoHandler{DB: db}
 
-	// Inicializa o server com o template
-	http.Handle("/", http.FileServer(http.Dir("template")))
+	// Inicializa o server com o template e mantém a rota GetAll
+	http.HandleFunc("/", pedidoHandler.List)
 
 	// Rota Post
 	http.HandleFunc("/create", pedidoHandler.Create)
+	// // Rota GetAll
 
 	fmt.Println("Conectado")
 
