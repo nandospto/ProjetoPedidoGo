@@ -50,3 +50,40 @@ func ListOrders(db *sql.DB) ([]Order, error) {
 	}
 	return pedidos, nil
 }
+
+func EditOrder(db *sql.DB, id int) error {
+	var currentStatus string
+
+	err := db.QueryRow(`SELECT status FROM pedidos WHERE id = ?`, id).Scan(&currentStatus)
+
+	if err != nil {
+		return err
+	}
+
+	switch currentStatus {
+	case "aberto":
+		currentStatus = "em preparo"
+	case "em preparo":
+		currentStatus = "para retirada"
+	case "para retirada":
+		currentStatus = "finalizado"
+	default:
+		return nil
+	}
+
+	_, err = db.Exec(`UPDATE pedidos SET status = ? WHERE id = ?`, currentStatus, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func RemoveOrder(db *sql.DB, id int) error {
+
+	_, err := db.Exec(`DELETE FROM pedidos WHERE id = ?`, id)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
