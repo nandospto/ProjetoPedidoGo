@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"pedidoservice/models"
 	"strconv"
+	"strings"
 )
 
 type PedidoHandler struct {
@@ -23,6 +24,9 @@ func (h PedidoHandler) Create(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("POST")
 	descricao := r.FormValue("descricao")
 	fmt.Println(descricao)
+
+	descricao = strings.TrimSpace(descricao)
+
 	if descricao == "" {
 		http.Error(w, "Descrição obrigatória", http.StatusBadRequest)
 		return
