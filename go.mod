@@ -1,4 +1,4 @@
-module example/hello
+module pedidoservice
 
 go 1.27.0
 
