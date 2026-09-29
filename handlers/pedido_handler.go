@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"fmt"
+	"html/template"
 	"net/http"
 	"pedidoservice/models"
 )
@@ -32,4 +33,23 @@ func (h PedidoHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func (h PedidoHandler) List(w http.ResponseWriter, r *http.Request) {
+	pedidos, err := models.ListOrders(h.DB)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	if r.Method != http.MethodGet {
+		fmt.Println(r)
+		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
+		return
+	}
+
+	fmt.Println("GET")
+
+	tmpl := template.Must(template.ParseFiles("template/index.html"))
+	tmpl.Execute(w, pedidos)
 }

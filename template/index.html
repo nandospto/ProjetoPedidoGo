@@ -1,17 +1,43 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>Sistema de Pedidos de Balcão</title>
     <style>
-        body { font-family: sans-serif; margin: 20px; }
-        form { margin-bottom: 20px; }
-        input, button { padding: 8px; margin-right: 5px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th { background-color: #f4f4f4; }
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input,
+        button {
+            padding: 8px;
+            margin-right: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
     </style>
 </head>
+
 <body>
     <h1>Pedidos de Balcão</h1>
 
@@ -32,21 +58,27 @@
                 <th>Status</th>
                 <th>Data</th>
                 <th>Ações</th>
+                <th>Finalizar</th>
             </tr>
         </thead>
         <tbody>
             {{range .}}
             <tr>
-                <td>{{.ID}}</td>
-                <td>{{.Descricao}}</td>
+                <td>{{.Id}}</td>
+                <td>{{.Description}}</td>
                 <td>{{.Status}}</td>
-                <td>{{.DataCriacao.Format "02/01/2006 15:04"}}</td>
+                <td>{{.Created_at.Format "02/01/2006 15:04"}}</td>
                 <td>
                     {{if eq .Status "aberto"}}
-                        <a href="/pedidos/editar?id={{.ID}}">Editar</a>
+                    <a href="/update?id={{.Id}}">Editar</a>
                     {{else}}
-                        Finalizado
-                    {{/if}}
+                    Finalizado
+                    {{end}}
+                </td>
+                <td>
+                    {{if eq .Status "aberto"}}
+                    <a href="/delete?id={{.Id}}">Concluir</a>
+                    {{end}}
                 </td>
             </tr>
             {{else}}
@@ -57,4 +89,5 @@
         </tbody>
     </table>
 </body>
+
 </html>
