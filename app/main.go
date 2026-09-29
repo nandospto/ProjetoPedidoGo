@@ -24,7 +24,10 @@ func main() {
 
 	// Rota Post
 	http.HandleFunc("/create", pedidoHandler.Create)
-	// // Rota GetAll
+	// Rota Update
+	http.HandleFunc("/update", pedidoHandler.Edit)
+	// Rota Delete
+	http.HandleFunc("/delete", pedidoHandler.Remove)
 
 	fmt.Println("Conectado")
 

@@ -58,7 +58,7 @@
                 <th>Status</th>
                 <th>Data</th>
                 <th>Ações</th>
-                <th>Finalizar</th>
+                <th>Remover</th>
             </tr>
         </thead>
         <tbody>
@@ -69,15 +69,15 @@
                 <td>{{.Status}}</td>
                 <td>{{.Created_at.Format "02/01/2006 15:04"}}</td>
                 <td>
-                    {{if eq .Status "aberto"}}
-                    <a href="/update?id={{.Id}}">Editar</a>
+                    {{if ne .Status "finalizado"}}
+                    <a href="/update?id={{.Id}}">Atualizar</a>
                     {{else}}
                     Finalizado
                     {{end}}
                 </td>
                 <td>
-                    {{if eq .Status "aberto"}}
-                    <a href="/delete?id={{.Id}}">Concluir</a>
+                    {{if ne .Status "Remover"}}
+                    <a href="/delete?id={{.Id}}">X</a>
                     {{end}}
                 </td>
             </tr>

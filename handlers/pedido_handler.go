@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/http"
 	"pedidoservice/models"
+	"strconv"
 )
 
 type PedidoHandler struct {
@@ -52,4 +53,50 @@ func (h PedidoHandler) List(w http.ResponseWriter, r *http.Request) {
 
 	tmpl := template.Must(template.ParseFiles("template/index.html"))
 	tmpl.Execute(w, pedidos)
+}
+
+func (h PedidoHandler) Edit(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost && r.Method != http.MethodGet {
+		fmt.Println(r)
+		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
+		return
+	}
+
+	stringId := r.URL.Query().Get("id")
+	fmt.Println(stringId)
+
+	id, err := strconv.Atoi(stringId)
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+	}
+
+	err = models.EditOrder(h.DB, id)
+	if err != nil {
+		http.Error(w, "error updating order: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func (h PedidoHandler) Remove(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost && r.Method != http.MethodGet {
+		fmt.Println(r)
+		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
+		return
+	}
+
+	stringId := r.URL.Query().Get("id")
+	fmt.Println(stringId)
+
+	id, err := strconv.Atoi(stringId)
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+	}
+
+	err = models.RemoveOrder(h.DB, id)
+	if err != nil {
+		http.Error(w, "error updating order: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
